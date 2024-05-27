@@ -8,7 +8,7 @@ const router = Router()
 router.use((_req, res, next) => {
     res.set('content-type', 'application/json')
     if (envVars.isDev()) {
-        res.set('Access-Control-Allow-Origin', 'http://localhost:3000')
+        // res.set('Access-Control-Allow-Origin', 'http://localhost:5173')
         console.log('Getting request at url', _req.url)
     }
 

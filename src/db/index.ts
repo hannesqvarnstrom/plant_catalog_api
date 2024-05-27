@@ -32,7 +32,7 @@ export class DatabaseManager {
      * Used when you have altered environment variables, and want to connect to another DB.
      */
     public async refreshConnection() {
-        this.connect(envVars.get('DB_CONNECTION'))
+        this.connect(envVars.get('DATABASE_URL'))
     }
 
     public async truncateTables() {

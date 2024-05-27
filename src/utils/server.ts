@@ -12,14 +12,6 @@ export default function makeServer(): Promise<Express> {
     const server = express()
     server.use(express.json())
     server.use(cors())
-    server.use((req, res) => {
-        console.log(req)
-        console.log(req)
-        const testing = AuthenticationService.compare('this', 'that')
-
-        console.log('testing:', testing)
-        return res.send('Hello  ???  :D ')
-    })
     server.use(routes)
     server.use(errorHandler)
     return Promise.resolve(server)
