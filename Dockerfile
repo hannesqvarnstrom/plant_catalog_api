@@ -3,7 +3,7 @@ FROM node:18
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json", "tsconfig.json", ".env", "./"]
 COPY ./src ./src
-RUN npm install
+RUN npm i
 EXPOSE 3000
 CMD npm run dev
 

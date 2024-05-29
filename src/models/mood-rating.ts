@@ -1,66 +1,45 @@
-// import dbManager from "../db"
-// import { moodRatings } from "../db/schema"
-// import { and, between, eq, InferModel, sql } from 'drizzle-orm'
-// import { AppError } from "../utils/errors"
+import dbManager from "../db"
+import { plants } from "../db/schema"
+import { and, between, eq, InferColumnsDataTypes, InferInsertModel, InferSelectModel, sql } from 'drizzle-orm'
+import { AppError } from "../utils/errors"
 
-// export type RawMoodRating = InferModel<typeof moodRatings>
-// export type TMoodRatingCreateArgs = Omit<InferModel<typeof moodRatings, 'insert'>, 'id'>
-// export type TMoodRating = RawMoodRating
-// export const MAX_RATING_VALUE = 10
-// export default class MoodRatingModel {
-//     constructor() {
+export type RawPlant = InferSelectModel<typeof plants>
+export type TPlantCreateArgs = InferInsertModel<typeof plants>
+export type TPlant = RawPlant
+export const MAX_RATING_VALUE = 10
+export default class MoodRatingModel {
+    constructor() {
 
-//     }
+    }
 
-//     public static factory(params: RawMoodRating): TMoodRating {
-//         const { id, value, timestamp, userId } = params
-//         return { id, value, timestamp, userId }
-//     }
+    public static factory(params: RawPlant): TPlant {
+        const { id, name, createdAt, userId } = params
+        return { id, name, createdAt, userId }
+    }
 
-//     public async create(args: TMoodRatingCreateArgs): Promise<TMoodRating> {
-//         const query = dbManager.db.insert(moodRatings)
-//             .values(args)
-//             .returning()
-//             .prepare(
-//                 'createRating' + new Date().getTime()
-//             )
+    public async create(args: TPlantCreateArgs): Promise<TPlant> {
+        const query = dbManager.db.insert(plants)
+            .values(args)
+            .returning()
+            .prepare(
+                'createRating' + new Date().getTime()
+            )
 
-//         const [result, ..._] = await query.execute()
-//         if (!result) {
-//             throw new AppError('Something went wrong while rating', 400)
-//         }
+        const [result, ..._] = await query.execute()
+        if (!result) {
+            throw new AppError('Something went wrong while rating', 400)
+        }
 
-//         return result
-//     }
+        return result
+    }
 
-//     public async getByUserId(userId: number): Promise<TMoodRating[]> {
-//         const query = dbManager.db.select()
-//             .from(moodRatings)
-//             .where(eq(moodRatings.userId, userId))
-//             .prepare('getByUserId' + new Date().getTime())
+    public async getByUserId(userId: number): Promise<TPlant[]> {
+        const query = dbManager.db.select()
+            .from(plants)
+            .where(eq(plants.userId, userId))
+            .prepare('getByUserId' + new Date().getTime())
 
-//         const result = await query.execute()
-//         return result
-//     }
-
-//     public async getByUserIdBetween(userId: number, args: {
-//         from: Date,
-//         to: Date
-//     }): Promise<TMoodRating[]> {
-//         const query = dbManager.db.select()
-//             .from(moodRatings)
-//             .where(
-//                 and(
-//                     eq(moodRatings.userId, userId),
-//                     between(moodRatings.timestamp, args.from, args.to)
-//                 )
-//             )
-//             .orderBy(sql`mood_ratings.timestamp asc`)
-//             .prepare('getByUserBetween' + new Date().getTime())
-
-//         const result = await query.execute()
-//         return result
-//     }
-
-
-// }
+        const result = await query.execute()
+        return result
+    }
+}

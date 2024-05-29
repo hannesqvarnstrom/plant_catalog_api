@@ -9,8 +9,9 @@
     "dev": "nodemon --watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "migrations:generate": "drizzle-kit generate",
-    "migrations:run": "node ./migrate.js"
+    "migrations:generate": "drizzle-kit generate && node ./make-down-migrations.js",
+    "migrations:run": "node ./migrate.js",
+    "migrations:rollback": "node ./migrate-down.js"
   },
   "author": "",
   "license": "ISC",

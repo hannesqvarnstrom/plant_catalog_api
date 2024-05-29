@@ -6,7 +6,6 @@ const { configDotenv } = require('dotenv')
 configDotenv()
 const connString = process.env.DATABASE_URL
 const pool = new Pool({
-    // user, password, database, port,
     connectionString: connString
 })
 
@@ -17,6 +16,3 @@ migrate(db, {
     console.log('Result:', result)
     process.exit(0)
 })
-
-// note to self: does not have rollbacks automatically
-// would need some other implementation
