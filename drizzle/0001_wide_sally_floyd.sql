@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS "plants" (
-	 "id" serial NOT NULL,
+	 "id" serial PRIMARY KEY NOT NULL,
 	"name" jsonb NOT NULL,
-	"user_id" integer PRIMARY KEY NOT NULL,
+	"user_id" integer NOT NULL,
 	"createdAt" timestamp DEFAULT now()
 );
 --> statement-breakpoint

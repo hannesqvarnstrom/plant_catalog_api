@@ -2,6 +2,7 @@ import { Router } from "express"
 import usersRouter from "./users"
 // import moodRatingRouter from "./mood-rating"
 import envVars from "../utils/environment"
+import plantsRouter from "./plants"
 
 const router = Router()
 
@@ -33,12 +34,14 @@ router.use(usersRouter)
 
 
 /**
- * Mood Ratings
+ * Plants
  * (All endpoints are JWT protected)
- * - GET /ratings,
- * - GET /ratings/average,
- * - POST /ratings,
+ * - GET /plants,
+ * - GET /plants/:plantId,
+ * - POST /plants,
+ * - PUT /plants/:plantId
+ * - DELETE /plants/:plantId
  */
-// router.use('/ratings', moodRatingRouter)
+router.use('/plants', plantsRouter)
 
 export default router

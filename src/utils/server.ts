@@ -6,6 +6,7 @@ import cors from 'cors'
 import { JwtPayload } from '../middleware/jwt'
 import { errorHandler } from '../middleware/error-handling'
 import authService, { AuthenticationService } from '../services/authentication'
+import { TUser } from '../models/user'
 // import { TUser } from '../models/user'
 
 export default function makeServer(): Promise<Express> {
@@ -21,7 +22,7 @@ declare global {
     namespace Express {
         interface Request {
             jwtPayload?: JwtPayload,
-            // user?: TUser
+            user?: TUser
         }
     }
 

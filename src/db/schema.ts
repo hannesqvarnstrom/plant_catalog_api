@@ -21,6 +21,7 @@ export const federatedIdentities = pgTable('federated_identities', {
 export const plants = pgTable('plants', {
     id: serial('id').primaryKey(),
     name: jsonb('name').notNull(), // @todo add model validation for the jsonb object?
+    fontSize: varchar('font_size').default('13px'),
     userId: integer('user_id').references(() => users.id).primaryKey(),
     createdAt: timestamp('createdAt').defaultNow(),
 }, (plants) => ({

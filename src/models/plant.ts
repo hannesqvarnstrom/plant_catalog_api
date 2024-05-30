@@ -6,15 +6,51 @@ import { AppError } from "../utils/errors"
 export type RawPlant = InferSelectModel<typeof plants>
 export type TPlantCreateArgs = InferInsertModel<typeof plants>
 export type TPlant = RawPlant
-export const MAX_RATING_VALUE = 10
-export default class MoodRatingModel {
+
+
+export interface ShallowPlant {
+    name: {
+        genusName: string;
+        speciesName?: string;
+        varietyName?: string;
+        name1a?: {
+            species: boolean;
+            name: string;
+        };
+        name1b?: {
+            species: boolean;
+            name: string;
+        };
+
+        name2a?: {
+            species: boolean;
+            name: string;
+        };
+
+        name2b?: {
+            species: boolean;
+            name: string;
+        };
+    },
+    from?: string,
+    image?: string,
+    fontSize: string
+    // ETC
+}
+
+export interface DeepPlant extends ShallowPlant {
+    id: string,
+}
+
+
+export default class PlantModel {
     constructor() {
 
     }
 
     public static factory(params: RawPlant): TPlant {
-        const { id, name, createdAt, userId } = params
-        return { id, name, createdAt, userId }
+        const { id, name, createdAt, userId, fontSize } = params
+        return { id, name, createdAt, userId, fontSize }
     }
 
     public async create(args: TPlantCreateArgs): Promise<TPlant> {
