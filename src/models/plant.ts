@@ -69,6 +69,25 @@ export default class PlantModel {
         return result
     }
 
+    public async getById<B extends boolean = true>(id: number, require: B): Promise<TPlant>
+    public async getById(id: number): Promise<TPlant | undefined>
+    public async getById<B extends boolean = false>(id: number, require?: B) {
+        const query = dbManager.db.select()
+            .from(plants)
+            .where(eq(plants.id, id))
+            .prepare('getByPlantId' + new Date().getTime())
+
+        const [result, ..._] = await query.execute()
+
+        if (result) {
+            const plant = PlantModel.factory(result)
+            return plant
+        } else {
+            if (require) throw new AppError('Plant not found', 404)
+            return undefined
+        }
+    }
+
     public async getByUserId(userId: number): Promise<TPlant[]> {
         const query = dbManager.db.select()
             .from(plants)
@@ -76,6 +95,25 @@ export default class PlantModel {
             .prepare('getByUserId' + new Date().getTime())
 
         const result = await query.execute()
+        return result
+    }
+
+    public async update(id: number, { name, fontSize }: Partial<InferInsertModel<typeof plants>>): Promise<TPlant> {
+        const updateObject: Partial<InferInsertModel<typeof plants>> = {}
+        if (name) updateObject.name = name
+        if (fontSize) updateObject.fontSize = fontSize
+
+        const query = dbManager.db.update(plants)
+            .set(updateObject)
+            .where(eq(plants.id, id))
+            .returning()
+            .prepare('updatePlant' + new Date().getTime())
+
+        const [result, ..._] = await query.execute()
+
+        if (!result) {
+            throw new AppError('Plant not found', 404)
+        }
         return result
     }
 }

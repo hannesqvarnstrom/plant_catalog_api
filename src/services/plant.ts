@@ -1,6 +1,8 @@
+import { InferInsertModel } from "drizzle-orm";
 import PlantModel, { ShallowPlant } from "../models/plant";
 import { TPlant, TPlantCreateArgs } from "../models/plant";
 import UserModel, { TUser } from "../models/user";
+import { plants } from "../db/schema";
 
 class PlantService {
     model: PlantModel
@@ -31,6 +33,11 @@ class PlantService {
         return ratings
     }
 
+    public async getById(id: string): Promise<TPlant> {
+        const plant = await this.model.getById(Number(id), true)
+        return plant
+    }
+
     /**
      * @param args The payload to create a new plant
      * @returns the newly created plant
@@ -40,6 +47,11 @@ class PlantService {
         // const nameWithDefaultValues = fillWithDefaultValues(name)
         const newRating = await this.model.create(args)
         return newRating
+    }
+
+    public async updatePlant(id: string, plantUpdateArgs: { name?: ShallowPlant['name'], fontSize?: string }): Promise<TPlant> {
+        const newPlant = await this.model.update(Number(id), plantUpdateArgs)
+        return newPlant
     }
 }
 // function fillWithDefaultValues(name: ShallowPlant['name']) {

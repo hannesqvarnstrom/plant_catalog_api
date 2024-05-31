@@ -94,6 +94,36 @@ export const updateMeSchema = z.object({
 // getPlantSchema, 
 // const x: InferInsertModel<typeof plants> = {}
 // const z: ShallowPlant = {}
+export const putPlantSchema = z.object({
+    name: z.object({
+        genusName: z.string({ required_error: 'Genus name is required' }),
+        speciesName: z.string().optional(),
+        varietyName: z.string().optional(),
+        name1a: z.object({
+            species: z.boolean().optional(),
+            name: z.string().optional()
+        }
+        ).optional(),
+        name1b: z.object({
+            species: z.boolean().optional(),
+            name: z.string().optional()
+        }
+        ).optional(),
+        name2a: z.object({
+            species: z.boolean().optional(),
+            name: z.string().optional()
+        }
+        ).optional(),
+        name2b: z.object({
+            species: z.boolean().optional(),
+            name: z.string().optional()
+        }
+        ).optional()
+    }),
+    // userId: z.number(),
+    fontSize: z.string().optional()
+})
+
 export const postPlantSchema = z.object({
     name: z.object({
         genusName: z.string({ required_error: 'Genus name is required' }),
