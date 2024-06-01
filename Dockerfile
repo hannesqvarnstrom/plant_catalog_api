@@ -14,6 +14,7 @@ COPY --from=builder /usr/src/package.json ./
 COPY --from=builder /usr/src/package-lock.json ./
 RUN npm ci --production
 EXPOSE 3000
+RUN npm migrations:run
 CMD ["node", "dist/index.js"]
 
 
