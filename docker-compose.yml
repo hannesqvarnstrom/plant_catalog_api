@@ -5,7 +5,7 @@ services:
       - 3000:3000
       - 9229:9229 # debugger port
     volumes:
-      - .:/usr/src/app # change this?
+      - .:/usr/src # change this?
       # - /usr/src/app/node_modules
     command: npm run dev # ?
     depends_on:

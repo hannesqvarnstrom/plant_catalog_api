@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src
 COPY ["package.json", "package-lock.json", "tsconfig.json", "./"]
 COPY ./src ./src
 RUN npm i
