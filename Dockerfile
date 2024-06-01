@@ -7,7 +7,9 @@ COPY ./src ./src
 RUN npm i
 #EXPOSE 3000
 RUN npm run build
+ARG DATABASE_URL
 
+ENV DATABASE_URL=$DATABASE_URL
 # FROM node:18
 # WORKDIR /usr/src
 # COPY --from=builder /usr/src/dist ./dist
