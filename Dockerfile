@@ -1,21 +1,41 @@
-FROM node:18
+FROM node:18 AS builder
 
 WORKDIR /usr/src
 COPY ["package.json", "package-lock.json", "tsconfig.json", "./"]
 COPY ./src ./src
 RUN npm i
+#EXPOSE 3000
+RUN npm run build
+
+FROM node:18
+WORKDIR /usr/src
+COPY --from=builder /usr/src/dist ./dist
+COPY --from=builder /usr/src/package.json ./
+COPY --from=builder /usr/src/package-lock.json ./
+RUN npm ci --production
 EXPOSE 3000
-CMD npm run dev
-
-# COPY ["package.json", "package-lock.json", "tsconfig.json", ".env", "./"]
+CMD ["node", "dist/index.js"]
 
 
-# FROM node:16.13.1-alpine3.14
-# WORKDIR /usr/src/app
+# OLD DEV SETUP
+# FROM node:18
 
-
+# WORKDIR /usr/src
+# COPY ["package.json", "package-lock.json", "tsconfig.json", "./"]
 # COPY ./src ./src
-
-# RUN npm install
-
+# RUN npm i
+# EXPOSE 3000
 # CMD npm run dev
+
+# # COPY ["package.json", "package-lock.json", "tsconfig.json", ".env", "./"]
+
+
+# # FROM node:16.13.1-alpine3.14
+# # WORKDIR /usr/src/app
+
+
+# # COPY ./src ./src
+
+# # RUN npm install
+
+# # CMD npm run dev
