@@ -119,9 +119,12 @@ export const putPlantSchema = z.object({
             name: z.string().optional()
         }
         ).optional()
-    }),
+    }).optional().nullable(),
     // userId: z.number(),
-    fontSize: z.string().optional()
+    fontSize: z.string().optional(),
+    fromTrader: z.string().optional().nullable(),
+    type: z.enum(['cutting', 'seed', 'rhizome', 'none']).optional(),
+    location: z.string().optional().nullable(),
 })
 
 export const postPlantSchema = z.object({
@@ -152,6 +155,10 @@ export const postPlantSchema = z.object({
     }),
     // userId: z.number(),
     fontSize: z.string().optional(),
+    fromTrader: z.string().optional().nullable(),
+    type: z.enum(['cutting', 'seed', 'rhizome', 'none']),
+    location: z.string().nullable().optional(),
+
 })
 // export const getPlantSchema = z.object({
 // @todo add search filters i guess?
@@ -165,3 +172,13 @@ export const postPlantSchema = z.object({
 // export const postRatingSchema = z.object({
 //     value: z.number().min(1).max(MAX_RATING_VALUE),
 // }).strict()
+
+export const postTraderSchema = z.object({
+    name: z.string(),
+    location: z.string().optional()
+})
+
+export const putTraderSchema = z.object({
+    name: z.string(),
+    location: z.string().optional()
+})

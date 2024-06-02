@@ -19,7 +19,10 @@ ENV DATABASE_URL=$DATABASE_URL
 # COPY --from=builder /usr/src/drizzle ./
 RUN npm ci --production
 EXPOSE 3000
+
+# comment out the line below when rebuilding the container, and run the migrations inside of the Docker container after it has started. The DB isnt created until later locally, so it needs to wait a bit.
 RUN npm run migrations:run
+
 CMD ["node", "dist/index.js"]
 
 

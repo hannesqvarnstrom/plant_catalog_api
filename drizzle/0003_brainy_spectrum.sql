@@ -1,1 +1,0 @@
-ALTER TABLE "plants" ADD COLUMN "font_size" varchar DEFAULT '13px';

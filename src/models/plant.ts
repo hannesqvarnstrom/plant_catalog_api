@@ -2,6 +2,7 @@ import dbManager from "../db"
 import { plants } from "../db/schema"
 import { and, between, eq, InferColumnsDataTypes, InferInsertModel, InferSelectModel, sql } from 'drizzle-orm'
 import { AppError } from "../utils/errors"
+import { PlantTypeCol } from "../services/plant"
 
 export type RawPlant = InferSelectModel<typeof plants>
 export type TPlantCreateArgs = InferInsertModel<typeof plants>
@@ -32,7 +33,9 @@ export interface ShallowPlant {
             name: string;
         };
     },
-    from?: string,
+    fromTrader?: number | null,
+    location?: string,
+    type?: PlantTypeCol,
     image?: string,
     fontSize: string
     // ETC
@@ -49,8 +52,8 @@ export default class PlantModel {
     }
 
     public static factory(params: RawPlant): TPlant {
-        const { id, name, createdAt, userId, fontSize } = params
-        return { id, name, createdAt, userId, fontSize }
+        const { id, name, createdAt, userId, fontSize, fromTrader, location, type } = params
+        return { id, name, createdAt, userId, fontSize, fromTrader, location, type }
     }
 
     public async create(args: TPlantCreateArgs): Promise<TPlant> {
@@ -98,10 +101,13 @@ export default class PlantModel {
         return result
     }
 
-    public async update(id: number, { name, fontSize }: Partial<InferInsertModel<typeof plants>>): Promise<TPlant> {
+    public async update(id: number, { name, fontSize, fromTrader, location, type }: Partial<InferInsertModel<typeof plants>>): Promise<TPlant> {
         const updateObject: Partial<InferInsertModel<typeof plants>> = {}
         if (name) updateObject.name = name
         if (fontSize) updateObject.fontSize = fontSize
+        if (fromTrader || fromTrader === null) updateObject.fromTrader = fromTrader
+        if (location || location === '' || location === null) updateObject.location = location
+        if (type) updateObject.type = type
 
         const query = dbManager.db.update(plants)
             .set(updateObject)

@@ -1,1 +1,0 @@
-ALTER TABLE "plants" DROP COLUMN "id";

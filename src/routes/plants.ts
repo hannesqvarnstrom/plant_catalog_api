@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { requireJwt } from '../middleware/jwt'
 import userService from '../services/user'
-import plantService from '../services/plant'
+import plantService, { PlantUpdateArgs } from '../services/plant'
 import { postPlantSchema, putPlantSchema } from './schemas'
 import { validateRequest } from 'zod-express-middleware'
 import { validateOwnership } from '../middleware/ownership'
@@ -32,11 +32,15 @@ plantsRouter.get('/', async (req, res, next) => {
 })
 
 plantsRouter.post('/',
-    validateRequest({ body: postPlantSchema }),
+    // validateRequest({ body: postPlantSchema }),
     async (req, res, next) => {
         try {
-            const { fontSize, name } = req.body
-            const newPlant = await plantService.createPlant({ fontSize, name, userId: req.user!.id })
+            const { fontSize, name, location, fromTrader, type } = postPlantSchema.parse(req.body)// req.body
+            const newPlant = await plantService.createPlant({
+                fontSize, name, userId: req.user!.id, location, fromTrader:
+                    (!fromTrader || fromTrader === 'None') ? null : Number(fromTrader),
+                type
+            })
 
             return res.status(201).send(newPlant)
         } catch (error) {
@@ -45,19 +49,35 @@ plantsRouter.post('/',
         }
     })
 
-plantsRouter.put('/:plantId', validateRequest({ body: putPlantSchema }),
+plantsRouter.put('/:plantId',
+    // validateRequest({ body: putPlantSchema }),
     validateOwnership,
     async (req, res, next) => {
         try {
-            const { fontSize, name } = req.body
-            const validatedName: ShallowPlant['name'] = validateName(name as ClientNamePayload)
-            const updatedPlant = await plantService.updatePlant(req.params.plantId, { fontSize: fontSize, name: validatedName })
-            return res.status(201).send(updatedPlant)
+            const { fontSize, name, location, fromTrader, type } = putPlantSchema.parse(req.body)//req.body
+            let validatedName
+            if (name) {
+                validatedName = validateName(name as ClientNamePayload)
+            }
+            const updateArgs: PlantUpdateArgs = {
+                fontSize, type,
+                fromTrader: (!fromTrader || fromTrader === 'None') ? null : Number(fromTrader),
+            }
+            if (name) {
+                updateArgs.name = validateName(name as ClientNamePayload)
+            }
+            if (location || location === null || location === '') {
+                updateArgs.location = location
+            }
+
+            const updatedPlant = await plantService.updatePlant(req.params.plantId, updateArgs)
+            return res.status(200).send(updatedPlant)
         } catch (err) {
             console.error('err', err)
             return next(err)
         }
     })
+
 export default plantsRouter
 
 type ClientNamePayload = Partial<ShallowPlant['name']> & {

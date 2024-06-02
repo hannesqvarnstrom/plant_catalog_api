@@ -5,7 +5,6 @@ const { migrate } = require('drizzle-orm/node-postgres/migrator')
 const { configDotenv } = require('dotenv')
 configDotenv()
 const connString = process.env.DATABASE_URL
-console.log('connString:', connString)
 const pool = new Pool({
     connectionString: connString
 })
