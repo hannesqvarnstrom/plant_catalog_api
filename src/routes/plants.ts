@@ -61,8 +61,14 @@ plantsRouter.put('/:plantId',
             }
             const updateArgs: PlantUpdateArgs = {
                 fontSize, type,
-                fromTrader: (!fromTrader || fromTrader === 'None') ? null : Number(fromTrader),
             }
+
+            if (fromTrader === 'none') {
+                updateArgs.fromTrader = null
+            } else if (fromTrader) {
+                updateArgs.fromTrader = Number(fromTrader)
+            }
+
             if (name) {
                 updateArgs.name = validateName(name as ClientNamePayload)
             }
