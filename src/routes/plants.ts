@@ -38,7 +38,7 @@ plantsRouter.post('/',
             const { fontSize, name, location, fromTrader, type } = postPlantSchema.parse(req.body)// req.body
             const newPlant = await plantService.createPlant({
                 fontSize, name, userId: req.user!.id, location, fromTrader:
-                    (!fromTrader || fromTrader === 'None') ? null : Number(fromTrader),
+                    (!fromTrader || fromTrader === 'none') ? null : Number(fromTrader),
                 type
             })
 
