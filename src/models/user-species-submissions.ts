@@ -1,12 +1,12 @@
 import dbManager from "../db"
-import { plants } from "../db/schema"
+import { plants, users, userSpeciesSubmissions } from "../db/schema"
 import { and, between, eq, InferColumnsDataTypes, InferInsertModel, InferSelectModel, sql } from 'drizzle-orm'
 import { AppError } from "../utils/errors"
 import { PlantTypeCol } from "../services/plant"
 
-export type RawPlant = InferSelectModel<typeof plants>
-export type TPlantCreateArgs = InferInsertModel<typeof plants>
-export type TPlant = RawPlant
+export type RawUserSpeciesSubmission = InferSelectModel<typeof userSpeciesSubmissions>
+export type TUserSpeciesSubmissionCreateArgs = InferInsertModel<typeof userSpeciesSubmissions>
+export type TUserSpeciesSubmission = RawUserSpeciesSubmission
 
 
 // export interface ShallowPlant {
@@ -47,22 +47,21 @@ export type TPlant = RawPlant
 // }
 
 
-export default class PlantModel {
+export default class UserSpeciesSubmissionModel {
     constructor() {
-
     }
 
-    public static factory(params: RawPlant): TPlant {
-        const { id, createdAt, userId, type, speciesId } = params
-        return { id, createdAt, userId, type, speciesId }
+    public static factory(params: RawUserSpeciesSubmission): TUserSpeciesSubmission {
+        const { id, createdAt, userId, speciesId } = params
+        return { id, createdAt, userId, speciesId }
     }
 
-    public async create(args: TPlantCreateArgs): Promise<TPlant> {
-        const query = dbManager.db.insert(plants)
+    public async create(args: TUserSpeciesSubmissionCreateArgs): Promise<TUserSpeciesSubmission> {
+        const query = dbManager.db.insert(userSpeciesSubmissions)
             .values(args)
             .returning()
             .prepare(
-                'createPlant' + new Date().getTime()
+                'createSpeciesSubmission' + new Date().getTime()
             )
 
         const [result, ..._] = await query.execute()
@@ -73,51 +72,32 @@ export default class PlantModel {
         return result
     }
 
-    public async getById<B extends boolean = true>(id: number, require: B): Promise<TPlant>
-    public async getById(id: number): Promise<TPlant | undefined>
+    public async getById<B extends boolean = true>(id: number, require: B): Promise<TUserSpeciesSubmission>
+    public async getById(id: number): Promise<TUserSpeciesSubmission | undefined>
     public async getById<B extends boolean = false>(id: number, require?: B) {
         const query = dbManager.db.select()
-            .from(plants)
-            .where(eq(plants.id, id))
-            .prepare('getByPlantId' + new Date().getTime())
+            .from(userSpeciesSubmissions)
+            .where(eq(userSpeciesSubmissions.id, id))
+            .prepare('getBySpeciesSubmissionId' + new Date().getTime())
 
         const [result, ..._] = await query.execute()
 
         if (result) {
-            const plant = PlantModel.factory(result)
+            const plant = UserSpeciesSubmissionModel.factory(result)
             return plant
         } else {
-            if (require) throw new AppError('Plant not found', 404)
+            if (require) throw new AppError('Submission not found', 404)
             return undefined
         }
     }
 
-    public async getByUserId(userId: number): Promise<TPlant[]> {
+    public async getByUserId(userId: number): Promise<TUserSpeciesSubmission[]> {
         const query = dbManager.db.select()
-            .from(plants)
-            .where(eq(plants.userId, userId))
+            .from(userSpeciesSubmissions)
+            .where(eq(userSpeciesSubmissions.userId, userId))
             .prepare('getByUserId' + new Date().getTime())
 
         const result = await query.execute()
-        return result
-    }
-
-    public async update(id: number, { speciesId, type }: Partial<InferInsertModel<typeof plants>>): Promise<TPlant> {
-        const updateObject: Partial<InferInsertModel<typeof plants>> = {}
-        if (speciesId) updateObject.speciesId = speciesId
-        if (type) updateObject.type = type
-
-        const query = dbManager.db.update(plants)
-            .set(updateObject)
-            .where(eq(plants.id, id))
-            .returning()
-            .prepare('updatePlant' + new Date().getTime())
-
-        const [result, ..._] = await query.execute()
-
-        if (!result) {
-            throw new AppError('Plant not found', 404)
-        }
         return result
     }
 }

@@ -2,8 +2,8 @@ import { Router } from "express"
 import usersRouter from "./users"
 // import moodRatingRouter from "./mood-rating"
 import envVars from "../utils/environment"
-import plantsRouter from "./plants"
-import tradersRouter from "./traders"
+// import plantsRouter from "./plants"
+// import tradersRouter from "./traders"
 
 const router = Router()
 
@@ -33,7 +33,7 @@ router.get('/', (_req, res) => {
  */
 router.use(usersRouter)
 
-router.use('/traders', tradersRouter)
+// router.use('/traders', tradersRouter)
 
 /**
  * Plants
@@ -44,6 +44,6 @@ router.use('/traders', tradersRouter)
  * - PUT /plants/:plantId
  * - DELETE /plants/:plantId
  */
-router.use('/plants', plantsRouter)
+// router.use('/plants', plantsRouter)
 
 export default router

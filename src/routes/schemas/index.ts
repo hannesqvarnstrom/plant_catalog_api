@@ -1,6 +1,6 @@
 import { InferInsertModel } from "drizzle-orm";
 import { z } from "zod";
-import { plants } from "../../db/schema";
+// import { plants } from "../../db/schema";
 
 // import { MAX_RATING_VALUE } from "../../models/mood-rating";
 

@@ -1,6 +1,6 @@
 {
-  "id": "a63b8f4c-4abf-4561-98b6-a5f9be260043",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d8e2e427-87c0-47a2-8e21-383bb89850cd",
+  "prevId": "085557c0-4b01-49ce-9678-0586a0506b9e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -16,7 +16,7 @@
         },
         "name": {
           "name": "name",
-          "type": "jsonb",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -107,7 +107,7 @@
         },
         "name": {
           "name": "name",
-          "type": "jsonb",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -174,7 +174,7 @@
         },
         "name": {
           "name": "name",
-          "type": "jsonb",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -194,19 +194,19 @@
           "name": "gbif_key",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "gbif_family_key": {
           "name": "gbif_family_key",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "gbif_genus_key": {
           "name": "gbif_genus_key",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "vernacular_names": {
           "name": "vernacular_names",
